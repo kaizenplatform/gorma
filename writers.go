@@ -6,8 +6,6 @@ import (
 	"strings"
 	"text/template"
 
-	"bitbucket.org/pkg/inflect"
-
 	"github.com/goadesign/goa/design"
 	"github.com/goadesign/goa/goagen/codegen"
 	"github.com/jinzhu/inflection"
@@ -113,7 +111,7 @@ func fieldAssignmentModelToType(model *RelationalModelDefinition, ut *design.Vie
 
 		for ln, lnd := range ut.Parent.Links {
 			ln = codegen.Goify(ln, true)
-			s := inflect.Singularize(ln)
+			s := Singularize(ln)
 			var ifb string
 			if lnd.MediaType().IsArray() {
 				mt := codegen.Goify(lnd.MediaType().ToArray().ElemType.Type.(*design.MediaTypeDefinition).TypeName, true) + "LinkCollection"
@@ -189,7 +187,7 @@ func fieldAssignmentModelToType(model *RelationalModelDefinition, ut *design.Vie
 					fieldAssignments = append(fieldAssignments, ifa)
 					ifd := fmt.Sprintf("tmp%d := &%s.%s[i%d]", tmp, v, codegen.Goify(fname, true), tmp)
 					fieldAssignments = append(fieldAssignments, ifd)
-					ifb := fmt.Sprintf("%s.%s = append(%s.%s, tmp%d.%sTo%s())", utype, codegen.Goify(key, true), utype, codegen.Goify(key, true), tmp, inflect.Singularize(codegen.Goify(key, true)), helperFuncMediaTypeNames[inflect.Singularize(key)])
+					ifb := fmt.Sprintf("%s.%s = append(%s.%s, tmp%d.%sTo%s())", utype, codegen.Goify(key, true), utype, codegen.Goify(key, true), tmp, Singularize(codegen.Goify(key, true)), helperFuncMediaTypeNames[Singularize(key)])
 					fieldAssignments = append(fieldAssignments, ifb)
 					ifc := fmt.Sprintf("}")
 					fieldAssignments = append(fieldAssignments, ifc)

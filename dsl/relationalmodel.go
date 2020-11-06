@@ -4,8 +4,6 @@ import (
 	"strconv"
 	"strings"
 
-	"bitbucket.org/pkg/inflect"
-
 	"github.com/goadesign/goa/design"
 	"github.com/goadesign/goa/dslengine"
 	"github.com/goadesign/goa/goagen/codegen"
@@ -162,18 +160,18 @@ func Payload(r interface{}, act string) {
 func BelongsTo(parent string) {
 	if r, ok := relationalModelDefinition(false); ok {
 		idfield := gorma.NewRelationalFieldDefinition()
-		idfield.FieldName = codegen.Goify(inflect.Singularize(parent), true) + "ID"
-		idfield.Description = "Belongs To " + codegen.Goify(inflect.Singularize(parent), true)
+		idfield.FieldName = codegen.Goify(gorma.Singularize(parent), true) + "ID"
+		idfield.Description = "Belongs To " + codegen.Goify(gorma.Singularize(parent), true)
 		idfield.Parent = r
 		idfield.Datatype = gorma.BelongsTo
-		idfield.DatabaseFieldName = SanitizeDBFieldName(codegen.Goify(inflect.Singularize(parent), true) + "ID")
+		idfield.DatabaseFieldName = SanitizeDBFieldName(codegen.Goify(gorma.Singularize(parent), true) + "ID")
 		r.RelationalFields[idfield.FieldName] = idfield
-		bt, ok := r.Parent.RelationalModels[codegen.Goify(inflect.Singularize(parent), true)]
+		bt, ok := r.Parent.RelationalModels[codegen.Goify(gorma.Singularize(parent), true)]
 		if ok {
 			r.BelongsTo[bt.ModelName] = bt
 		} else {
 			model := gorma.NewRelationalModelDefinition()
-			model.ModelName = codegen.Goify(inflect.Singularize(parent), true)
+			model.ModelName = codegen.Goify(gorma.Singularize(parent), true)
 			model.Parent = r.Parent
 			r.BelongsTo[model.ModelName] = model
 		}
@@ -190,7 +188,7 @@ func BelongsTo(parent string) {
 func HasOne(child string) {
 	if r, ok := relationalModelDefinition(false); ok {
 		field := gorma.NewRelationalFieldDefinition()
-		field.FieldName = codegen.Goify(inflect.Singularize(child), true)
+		field.FieldName = codegen.Goify(gorma.Singularize(child), true)
 		field.HasOne = child
 		field.Description = "has one " + child
 		field.Datatype = gorma.HasOne
@@ -203,12 +201,12 @@ func HasOne(child string) {
 			r.HasOne[child] = bt
 			// create the fk field
 			f := gorma.NewRelationalFieldDefinition()
-			f.FieldName = codegen.Goify(inflect.Singularize(r.ModelName), true) + "ID"
+			f.FieldName = codegen.Goify(gorma.Singularize(r.ModelName), true) + "ID"
 			f.HasOne = child
 			f.Description = "has one " + child
 			f.Datatype = gorma.HasOneKey
 			f.Parent = bt
-			f.DatabaseFieldName = SanitizeDBFieldName(codegen.Goify(inflect.Singularize(r.ModelName), true) + "ID")
+			f.DatabaseFieldName = SanitizeDBFieldName(codegen.Goify(gorma.Singularize(r.ModelName), true) + "ID")
 			bt.RelationalFields[f.FieldName] = f
 		} else {
 			model := gorma.NewRelationalModelDefinition()
@@ -218,12 +216,12 @@ func HasOne(child string) {
 
 			// create the fk field
 			f := gorma.NewRelationalFieldDefinition()
-			f.FieldName = codegen.Goify(inflect.Singularize(r.ModelName), true) + "ID"
+			f.FieldName = codegen.Goify(gorma.Singularize(r.ModelName), true) + "ID"
 			f.HasOne = child
 			f.Description = "has one " + child
 			f.Datatype = gorma.HasOneKey
 			f.Parent = bt
-			f.DatabaseFieldName = SanitizeDBFieldName(codegen.Goify(inflect.Singularize(r.ModelName), true) + "ID")
+			f.DatabaseFieldName = SanitizeDBFieldName(codegen.Goify(gorma.Singularize(r.ModelName), true) + "ID")
 			model.RelationalFields[f.FieldName] = f
 		}
 	}
@@ -256,12 +254,12 @@ func HasMany(name, child string) {
 			r.HasMany[child] = model
 			// create the fk field
 			f := gorma.NewRelationalFieldDefinition()
-			f.FieldName = codegen.Goify(inflect.Singularize(r.ModelName), true) + "ID"
+			f.FieldName = codegen.Goify(gorma.Singularize(r.ModelName), true) + "ID"
 			f.HasMany = child
 			f.Description = "has many " + child
 			f.Datatype = gorma.HasManyKey
 			f.Parent = model
-			f.DatabaseFieldName = SanitizeDBFieldName(codegen.Goify(inflect.Singularize(r.ModelName), true) + "ID")
+			f.DatabaseFieldName = SanitizeDBFieldName(codegen.Goify(gorma.Singularize(r.ModelName), true) + "ID")
 			model.RelationalFields[f.FieldName] = f
 		} else {
 			model = gorma.NewRelationalModelDefinition()
@@ -271,12 +269,12 @@ func HasMany(name, child string) {
 		r.HasMany[child] = model
 		// create the fk field
 		f := gorma.NewRelationalFieldDefinition()
-		f.FieldName = codegen.Goify(inflect.Singularize(r.ModelName), true) + "ID"
+		f.FieldName = codegen.Goify(gorma.Singularize(r.ModelName), true) + "ID"
 		f.HasMany = child
 		f.Description = "has many " + child
 		f.Datatype = gorma.HasManyKey
 		f.Parent = model
-		f.DatabaseFieldName = SanitizeDBFieldName(codegen.Goify(inflect.Singularize(r.ModelName), true) + "ID")
+		f.DatabaseFieldName = SanitizeDBFieldName(codegen.Goify(gorma.Singularize(r.ModelName), true) + "ID")
 		model.RelationalFields[f.FieldName] = f
 	}
 }

@@ -6,8 +6,6 @@ import (
 	"strings"
 	"unicode"
 
-	"bitbucket.org/pkg/inflect"
-
 	"github.com/goadesign/goa/design"
 	"github.com/goadesign/goa/dslengine"
 	"github.com/goadesign/goa/goagen/codegen"
@@ -52,7 +50,7 @@ func (f *RelationalModelDefinition) DSL() func() {
 
 // TableName returns the TableName of the struct.
 func (f RelationalModelDefinition) TableName() string {
-	return inflect.Underscore(inflection.Plural(f.ModelName))
+	return Underscore(inflection.Plural(f.ModelName))
 }
 
 // Children returns a slice of this objects children.
